@@ -1,5 +1,5 @@
 ---
-title: Notes Foundations of Statistical Analysis and Machine Learning II
+title: Notes FSML II
 thanks: Replication files are available on the author's Github account (http://github.com/svmiller/svm-r-markdown-templates). 
 author:
   name: Tobías Chavarría
@@ -42,7 +42,77 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-Creating an histogram
+## Introduction
+
+Statistics notation:
+
+1. If $X_1, ..., X_n$ are random variables (r.v).
+2. $x_1, ..., x_n$ are observations.
+3. If we write *i.i.d* means that the r.v are independent and identically distributed.
+
+**First aim:** To propose a model for a random variable.
+
+Generalization to multi-dimensional case:
+
+- Y: response variable.
+- $X^{(1)}, ...,X^{(p)}$: explanatory variables.
+
+**Aim**: To find a functional link between $Y$ and the explanatory variables.
+
+To find this functional link , the method to apply depends on the nature of the r.v's.
+
+| Y 	| Model 	|
+|---	|---	|
+| Numeric 	| Linear model 	|
+| Qualitative (labels) 	| Classification 	|
+
+**Linear model**
+
+A linear model is given by:
+
+$Y_i = \beta_0 + \beta_1X^{1}_i + ... + \beta_pX^{p}_i + \varepsilon_i$
+
+where:
+
+- $\beta_0, ..., \beta_p$ are unknown *fixed* parameters that can be estimated by two methods: 
+  - Point estimation
+  - Confidence interval
+- $\varepsilon$ is the noise and also a random variable.
+
+
+## Chapter 1: Estimation for **one parameter**
+
+**Previous Knowledge**
+
+- Random Variable: 
+ - The notion of distribution.
+ - The expectation and variance
+ - The distribution function
+ - The classical distributions (in particular the Gaussian)
+ - The Law of Large numbers and the Central Limit theorem
+ 
+### Introduction
+
+Given $x_1, ..., x_n$ numeric observations, to try to find a correct parametric model, we can use 2 [graphs](https://chartio.com/learn/charts/histogram-complete-guide/):
+
+- Barplot for discrete variables.
+
+density = count/n
+
+```{r create_barplot}
+max.temp <- c(22, 27, 26, 24, 23, 26, 28)
+
+barplot(max.temp,
+main = "Maximum Temperatures in a Week",
+xlab = "Degree Celsius",
+ylab = "Day",
+names.arg = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+```
+
+
+- Histogram for continuous variables 
+
+density = count for a bin/ n x length of the bin
 
 ```{r create_histogram}
 
@@ -64,10 +134,23 @@ hist(A, freq = FALSE, breaks = 100)
 
 ```
 
-## Point estimation
+To propose a parametric model:
+
+1. We make a graphical representation of the observations.
+2. We guess a theoretical model by looking the previous graphic.
+
+
+**Question:** with a representation, we can guess a parametric family of models, denoted by 
+$\{P_{\Theta}, \theta \in \Theta \}$.
+How to guess a correct value for $\theta$ thanks to the observations?
+
+**Answer:** *Estimation*.
+
+
+### Point estimation
 
 $x_i$ an observation of a r.v $X_i$
-we assume that $x_1, ..., x_n$ are *iid* with common distribution $P_{\Theta}$.
+we assume that $x_1, ..., x_n$ are *i.i.d* with common distribution $P_{\Theta}$.
 
 **Def**: Estimator
 An estimator of $\Theta$ is just a function of $X_1, ... X_n$ that **does not depend onto others unknown parameters.**
@@ -79,8 +162,9 @@ An estimation is the value of an estimator computed thanks to the observations.
 
 **Example**
 
-Consider $X_1, ..., X_n$ exponential distributed and *iid*, , an estimation is 
-$\lambda_n = \dfrac{n}{\sum x_i}$.
+Consider $X_1, ..., X_n$ exponential distributed and *i.i.d*, an *estimator* of $\lambda$
+is $\hat{\lambda}_n = \dfrac{n}{\sum X_i}$ an *estimation* is
+$\hat{\lambda}_n = \dfrac{n}{\sum x_i}$.
 
 **Def:**  Bias (for univariate parameter)
 
@@ -105,12 +189,12 @@ $b(\hat{\Theta}_n) \rightarrow 0$ as $n \rightarrow \infty +$
 
 - Maximum likelihood
 
-### Method of moments
+#### Method of moments
 
 Let $\Theta$ a parameter to estimated, parameter which is associate to  
-$X_1, ..., X_n$ *iid* rv.
+$X_1, ..., X_n$ *i.i.d* r.v.
 
-Let consider $k \in \mathbb{N}$:
+Let consider $k \in \mathbb{N}^*$:
 
 - the moment of order $k$ : $\mathbb{E}[x^k]$
 - the centered moment of order $k$: $\mathbb{E}[x - \mathbb{E}[x]]^k$
@@ -123,7 +207,7 @@ If there exist a value $k$ such that:
 
 *Applications*
 
-Let consider $X_1, ..., X_n$ exponential distributed and *iid*
+Let consider $X_1, ..., X_n$ exponential distributed and *i.i.d*
 
 Solution:
 
@@ -169,7 +253,7 @@ boxplot(m)
 
 
 
-### The Maximum Likelihood
+#### The Maximum Likelihood
 
 
 **Def:** likelihood
@@ -194,7 +278,7 @@ $$
 
 *Applications*
 
-Let consider $X_1, ..., X_n$ $\xi(\lambda)$ *iid*.
+Let consider $X_1, ..., X_n$ $\xi(\lambda)$ *i.i.d*.
 
 Compute the maximum likelihood estimator.
 
@@ -257,7 +341,7 @@ boxplot(theta)
 
 **Property**
 
-Let $X_1, ..., X_n$ *iid* r.v.
+Let $X_1, ..., X_n$ *i.i.d* r.v.
 Let $\mu = \mathbb{E}[X_1]$ (unknown)
 Let $\sigma^2 = V(X_1)$ (unknown)
 
