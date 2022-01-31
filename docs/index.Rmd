@@ -360,3 +360,26 @@ Show that:
 
 
 
+-- Day 2 --
+
+Solution exercise
+Theorem
+
+### Quality of an estimator
+
+**def:** Let $\theta$ an unknown parameter, let $\hat{\theta}_n$ an estimator of $\theta$,
+mean quadratic error is given by:
+
+
+**Property:** 
+$$MQE = V[\hat{\theta}_n] + ((b(\hat{\theta}_n)))^2
+
+**Proof:**
+$
+\begin{equation}
+MQE(\hat{\theta}_n) = ...
+\\
+
+\end{equation}
+$
+
