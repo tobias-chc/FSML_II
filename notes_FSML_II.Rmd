@@ -1,0 +1,278 @@
+---
+title: Notes Foundations of Statistical Analysis and Machine Learning II
+thanks: Replication files are available on the author's Github account (http://github.com/svmiller/svm-r-markdown-templates). 
+author:
+  name: Tobías Chavarría
+  affiliation: DSTI | DSBD2-001
+# date: "`r format(Sys.time(), '%d %B %Y')`" ## Or "Lecture no."
+output: 
+  html_document:
+    keep_md: false
+    theme: journal
+    highlight: haddock
+    # code_folding: show
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+    css: css/preamble.css ## For multi-col environments
+  pdf_document:
+    latex_engine: xelatex
+    keep_tex: false ## Change to true if want keep intermediate .tex file
+    toc: true
+    toc_depth: 3
+    dev: cairo_pdf
+    # fig_width: 7 ## Optional: Set default PDF figure width
+    # fig_height: 6 ## Optional: Set default PDF figure height
+    extra_dependencies: ['booktabs', 'threeparttable', 'float'] # "longtable"
+    includes:
+      in_header: tex/preamble.tex ## For multi-col environments
+    pandoc_args:
+        --template=tex/mytemplate.tex ## For affiliation field. See: https://bit.ly/2T191uZ
+always_allow_html: true
+urlcolor: blue
+mainfont: cochineal
+## Automatically knit to both formats:
+knit: (function(inputFile, encoding) {
+ rmarkdown::render(inputFile, encoding = encoding, 
+ output_format = 'all') 
+ })
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Creating an histogram
+
+```{r create_histogram}
+
+A <- rnorm(500, 0, 1)
+
+hist(A)
+
+hist(A, freq = FALSE)
+
+hist(A, freq = FALSE, breaks = 20)
+hist(A, freq = FALSE, breaks = 100)
+
+# In order to create more breaks, you need to increase the
+# numbers of observations
+
+
+A <- rnorm(50000, 0, 1)
+hist(A, freq = FALSE, breaks = 100)
+
+```
+
+## Point estimation
+
+$x_i$ an observation of a r.v $X_i$
+we assume that $x_1, ..., x_n$ are *iid* with common distribution $P_{\Theta}$.
+
+**Def**: Estimator
+An estimator of $\Theta$ is just a function of $X_1, ... X_n$ that **does not depend onto others unknown parameters.**
+
+**Rk**: An estimator is a random variable!
+
+**Def:** Estimation
+An estimation is the value of an estimator computed thanks to the observations.
+
+**Example**
+
+Consider $X_1, ..., X_n$ exponential distributed and *iid*, , an estimation is 
+$\lambda_n = \dfrac{n}{\sum x_i}$.
+
+**Def:**  Bias (for univariate parameter)
+
+Let consider $\hat{\Theta}_n$ an estimator of $\Theta$.
+
+The bias of $\hat{\Theta}_n$ is defined by:
+
+$b(\hat{\Theta}_n) := \mathbb{E}(\hat{\Theta}_n) - \Theta$ 
+
+We say that $\hat{\Theta}_n$ is an unbiased estimator if
+$\forall n \in \mathbb{N}^{+} \quad b(\hat{\Theta}_n) = 0$
+
+We say that $\hat{\Theta}_n$ is asymptotic unbiased estimator if:
+
+$b(\hat{\Theta}_n) \rightarrow 0$ as $n \rightarrow \infty +$
+
+**How to construct  estimator?**
+
+- Method of moments
+  - less computations
+  - based on the Law of large numbers
+
+- Maximum likelihood
+
+### Method of moments
+
+Let $\Theta$ a parameter to estimated, parameter which is associate to  
+$X_1, ..., X_n$ *iid* rv.
+
+Let consider $k \in \mathbb{N}$:
+
+- the moment of order $k$ : $\mathbb{E}[x^k]$
+- the centered moment of order $k$: $\mathbb{E}[x - \mathbb{E}[x]]^k$
+
+If there exist a value $k$ such that:
+
+- (a) $\mathbb{E}[x^k] =  g(\Theta)$
+
+- (b) $\mathbb{E}[x - \mathbb{E}[x]]^k =  h(\Theta)$
+
+*Applications*
+
+Let consider $X_1, ..., X_n$ exponential distributed and *iid*
+
+Solution:
+
+...
+
+```{r method_moments}
+
+A = rexp(500, 4)
+
+1/mean(A)
+
+m = c()
+
+for (i in 1:50) {
+  A = rexp(500, 4)
+  m[i] <- 1/mean(A)
+}
+
+
+mean(m)
+
+boxplot(m)
+
+
+## With more observations we got less variation (500 -> 5000)
+
+## Law of large numbers
+
+m = c()
+
+for (i in 1:50) {
+  A = rexp(50000, 4)
+  m[i] <- 1/mean(A)
+}
+
+
+mean(m)
+
+boxplot(m)
+
+
+```
+
+
+
+### The Maximum Likelihood
+
+
+**Def:** likelihood
+
+Let $X_1, ..., X_n$ independent random variables, whose distributions are all depending
+on the same parameter $\Theta$.
+
+Let $x_1, ..., x_n$ observations of those r.v
+
+$$
+\mathcal{L}(x_1, ..., x_n, \Theta) = \begin{cases} \Pi{} \\ \Pi \end{cases}
+$$
+
+**Def:** Estimator thanks to the maximum likelihood.
+
+$\hat{\Theta}_n$, an estimator for $\Theta$, due to the maximum likelihood, is solution of:
+
+
+$$
+\mathcal{L}(x_1, ..., x_n, \Theta) = \max_{\theta} \mathcal{L}(x_1, ..., x_n, \Theta)
+$$
+
+*Applications*
+
+Let consider $X_1, ..., X_n$ $\xi(\lambda)$ *iid*.
+
+Compute the maximum likelihood estimator.
+
+Solution:
+
+...
+
+
+```{r}
+
+n= 100
+
+U = runif(n, 0, 4)
+
+theta = max(U)
+
+
+for (i in 1:50) {
+  U = runif(n, 0, 4)
+  theta = c(theta, max(U))
+}
+
+
+mean(theta)
+
+boxplot(theta)
+
+
+## Adjust to make the estimator unbiased
+
+thetab = (n+1)/n*theta
+
+mean(thetab)
+
+boxplot(thetab)
+
+
+## With more observations
+
+n= 100
+
+U = runif(n, 0, 4)
+
+theta = max(U)
+
+
+for (i in 1:5000) {
+  U = runif(n, 0, 4)
+  theta = c(theta, max(U))
+}
+
+
+mean(theta)
+
+boxplot(theta)
+
+
+```
+
+
+**Property**
+
+Let $X_1, ..., X_n$ *iid* r.v.
+Let $\mu = \mathbb{E}[X_1]$ (unknown)
+Let $\sigma^2 = V(X_1)$ (unknown)
+
+A classical estimator is:
+
+- $\mu$ is $\hat{\mu}_n = \overline{X}_n = \frac{1}{n} \sum X_i$
+- $\sigma^2$ is $\hat{\sigma}^2_n = \frac{1}{n} \sum (X_i - \overline{X}_n)^2$
+
+
+**Exercise**
+
+Show that:
+
+1. $\hat{\mu}$ is unbiased.
+2. $\hat{\sigma}^2_n$ is biased and that $\dfrac{n}{n-1}\hat{\sigma}^2_n$ is unbiased.
+
+
+
