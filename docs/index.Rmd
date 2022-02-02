@@ -62,7 +62,7 @@ Generalization to multi-dimensional case:
 To find this functional link , the method to apply depends on the nature of the r.v's.
 
 | Y 	| Model 	|
-|---	|---	|
+|:---:	|:---:	|
 | Numeric 	| Linear model 	|
 | Qualitative (labels) 	| Classification 	|
 
@@ -95,9 +95,13 @@ where:
 
 Given $x_1, ..., x_n$ numeric observations, to try to find a correct parametric model, we can use 2 [graphs](https://chartio.com/learn/charts/histogram-complete-guide/):
 
-- Barplot for discrete variables.
+| Plot type 	| Variable type 	| Density 	|
+|:---:	|:---:	|:---:	|
+| Bar plot 	| Discrete 	| count/n 	|
+| Histogram 	| Continuous 	| count for a bin/ n x (length of the bin) 	|
 
-density = count/n
+
+**Barplot for discrete variables**
 
 ```{r create_barplot}
 max.temp <- c(22, 27, 26, 24, 23, 26, 28)
@@ -110,23 +114,26 @@ names.arg = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 ```
 
 
-- Histogram for continuous variables 
+**Histogram for continuous variables** 
 
-density = count for a bin/ n x length of the bin
 
 ```{r create_histogram}
 
 A <- rnorm(500, 0, 1)
 
+## The default execution of this function doesn't generate a density:
 hist(A)
 
+
+## You need to set freq = FALSE:
 hist(A, freq = FALSE)
 
-hist(A, freq = FALSE, breaks = 20)
+
+## You can set the numbers of bins that you want to use:
 hist(A, freq = FALSE, breaks = 100)
 
-# In order to create more breaks, you need to increase the
-# numbers of observations
+# But in order to create more breaks, you need to increase the
+# numbers of observations:
 
 
 A <- rnorm(50000, 0, 1)
@@ -134,11 +141,19 @@ hist(A, freq = FALSE, breaks = 100)
 
 ```
 
+
 To propose a parametric model:
 
-1. We make a graphical representation of the observations.
-2. We guess a theoretical model by looking the previous graphic.
+1. Make a graphical representation of the observations.
+2. Guess a theoretical model by looking the previous graphic.
 
+**Examples:** 
+
+Pasarlos a R!!
+
+Example 2: ![](/cloud/project/docs/images/model_1.png)
+
+Example 2: ![](/cloud/project/docs/images/model_2.png)
 
 **Question:** with a representation, we can guess a parametric family of models, denoted by 
 $\{P_{\Theta}, \theta \in \Theta \}$.
@@ -146,19 +161,19 @@ How to guess a correct value for $\theta$ thanks to the observations?
 
 **Answer:** *Estimation*.
 
-
 ### Point estimation
 
-$x_i$ an observation of a r.v $X_i$
-we assume that $x_1, ..., x_n$ are *i.i.d* with common distribution $P_{\Theta}$.
+Let $x_i$ an observation of a r.v $X_i$
+we assume that $X_1, ..., X_n$ are *i.i.d* with common distribution $P_{\theta}$.
 
-**Def**: Estimator
-An estimator of $\Theta$ is just a function of $X_1, ... X_n$ that **does not depend onto others unknown parameters.**
+##### Estimator 
 
-**Rk**: An estimator is a random variable!
+**Definition:** An estimator of $\Theta$ is just a function of $X_1, ... X_n$ that **does not depend onto others unknown parameters.**
 
-**Def:** Estimation
-An estimation is the value of an estimator computed thanks to the observations.
+**Remark:** An estimator is a random variable! 
+
+##### Estimation 
+**Definition:** An estimation is the value of an estimator computed thanks to the observations.
 
 **Example**
 
@@ -166,20 +181,27 @@ Consider $X_1, ..., X_n$ exponential distributed and *i.i.d*, an *estimator* of 
 is $\hat{\lambda}_n = \dfrac{n}{\sum X_i}$ an *estimation* is
 $\hat{\lambda}_n = \dfrac{n}{\sum x_i}$.
 
-**Def:**  Bias (for univariate parameter)
+| Distribution 	| Parameter 	| Estimator 	| Estimation 	|
+|:---:|:---:|:---:|:---:|
+|Exponential $\xi(\lambda)$ 	| $\lambda$ 	| $\dfrac{n}{\sum X_i}$|$\dfrac{n}{\sum x_i}$|
 
-Let consider $\hat{\Theta}_n$ an estimator of $\Theta$.
 
-The bias of $\hat{\Theta}_n$ is defined by:
+##### Bias (for univariate parameter)
 
-$b(\hat{\Theta}_n) := \mathbb{E}(\hat{\Theta}_n) - \Theta$ 
+**Definition:** Let consider $\hat{\theta}_n$ an estimator of $\theta$.
 
-We say that $\hat{\Theta}_n$ is an unbiased estimator if
-$\forall n \in \mathbb{N}^{+} \quad b(\hat{\Theta}_n) = 0$
+The bias of $\hat{\theta}_n$ is defined by:
 
-We say that $\hat{\Theta}_n$ is asymptotic unbiased estimator if:
+$$b(\hat{\theta}_n) := \mathbb{E}(\hat{\theta}_n) - \theta$$ 
 
-$b(\hat{\Theta}_n) \rightarrow 0$ as $n \rightarrow \infty +$
+* We say that $\hat{\theta}_n$ is an unbiased estimator if
+
+$$\forall n \in \mathbb{N}^{+} \quad b(\hat{\theta}_n) = 0$$
+
+* We say that $\hat{\theta}_n$ is *asymptotic unbiased* estimator if:
+
+$$b(\hat{\theta}_n) \rightarrow 0 \\ n \rightarrow +\infty$$
+
 
 **How to construct  estimator?**
 
@@ -191,27 +213,70 @@ $b(\hat{\Theta}_n) \rightarrow 0$ as $n \rightarrow \infty +$
 
 #### Method of moments
 
-Let $\Theta$ a parameter to estimated, parameter which is associate to  
+Let $\theta$ a parameter to estimated, parameter which is associate to  
 $X_1, ..., X_n$ *i.i.d* r.v.
 
 Let consider $k \in \mathbb{N}^*$:
 
-- the moment of order $k$ : $\mathbb{E}[x^k]$
-- the centered moment of order $k$: $\mathbb{E}[x - \mathbb{E}[x]]^k$
+- the moment of order $k$ : $\mathbb{E}[X^k]$
+- the centered moment of order $k$: $\mathbb{E}[X - \mathbb{E}[X]]^k$
 
 If there exist a value $k$ such that:
 
-- (a) $\mathbb{E}[x^k] =  g(\Theta)$
+- (a) $\mathbb{E}[X^k] =  g(\theta)$
 
-- (b) $\mathbb{E}[x - \mathbb{E}[x]]^k =  h(\Theta)$
+- (b) $\mathbb{E}[[X - \mathbb{E}[X]]^k] =  h(\theta)$
 
-*Applications*
+Then the estimator $\hat{\theta}_n$ of $\theta$ is solution of:
 
-Let consider $X_1, ..., X_n$ exponential distributed and *i.i.d*
+- (a) $g(\hat{\theta}_n) = \dfrac{1}{n}\sum X_i^k$
 
-Solution:
+- (b) $h(\hat{\theta}_n) = \dfrac{1}{n}\sum (X_i - \overline{X}_n)^k$ 
 
-...
+where 
+
+$$\overline{X}_n = \dfrac{1}{n}\sum X_i$$ 
+
+is the **empirical mean**.
+
+
+**Remark: Exponential Distribution**
+
+If Let $X \sim \xi(\lambda)$, then:
+
+- $f_\lambda(x) = \lambda\exp(-\lambda x) \mathbf{1}_{x \geq 0}$
+- $\mathbb{E}[X] = \int_{\mathbb{R}} x\cdot f_\lambda(x) dx$
+- $V[X] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$
+
+**Transfer formula:**
+
+$$\mathbb{E}[l(X)] =  \int_{\mathbb{R}} l(x)\cdot f_\lambda(x) dx$$
+
+#### Applications
+
+1. Let consider $X_1, ..., X_n$ exponential distributed and *i.i.d* compute an 
+estimator of $\lambda$ using the methods of moments.
+
+**Solution:**
+
+Let $X \sim \xi(\lambda)$, so:
+
+$$\mathbb{E}[X] = \dfrac{1}{\lambda}  \quad \text{and} \quad V[X] = \dfrac{1}{\lambda^2}$$
+By applying the method of moments ($k=1$) we get:
+
+$\dfrac{1}{\hat{\lambda}_{n,1}} = \dfrac{1}{n}\sum X_i$ 
+
+Thus:
+
+$$\hat{\lambda}_{n,1} = \dfrac{n}{\sum X_i}$$
+
+in the same way but using the variance  ($k=2$), we get:
+
+$\dfrac{1}{\hat{\lambda}_{n,2}^2} = \dfrac{1}{n}\sum (X_i - \overline{X}_n)^2$ 
+
+Thus:
+
+$$\hat{\lambda}_{n,2} = \dfrac{\sqrt{n}}{\sqrt{\sum (X_i - \overline{X}_n)^2}}$$
 
 ```{r method_moments}
 
@@ -251,14 +316,20 @@ boxplot(m)
 
 ```
 
+2. Let consider $X_1, ..., X_n$  *i.i.d*  $ \mathcal{U}([0, \sigma])$.
 
+  + Determine an estimator of $\sigma$ using the methods of moments.
+  + Let denote $\hat{\sigma}_n = 2\overline{X}_n$. 
+  Is $\hat{\sigma}_n$ an unbiased estimator?
+
+**Solution:**
 
 #### The Maximum Likelihood
 
 
-**Def:** likelihood
+##### Likelihood
 
-Let $X_1, ..., X_n$ independent random variables, whose distributions are all depending
+**Definition:** Let $X_1, ..., X_n$ independent random variables, whose distributions are all depending
 on the same parameter $\Theta$.
 
 Let $x_1, ..., x_n$ observations of those r.v
@@ -372,14 +443,275 @@ mean quadratic error is given by:
 
 
 **Property:** 
-$$MQE = V[\hat{\theta}_n] + ((b(\hat{\theta}_n)))^2
+$$MQE = V[\hat{\theta}_n] + ((b(\hat{\theta}_n)))^2$$
 
 **Proof:**
-$
+
 \begin{equation}
 MQE(\hat{\theta}_n) = ...
-\\
-
 \end{equation}
-$
+
+##theory##
+
+
+## Practical class
+
+1. Load the data in R software.
+2. Propose a model for the variables associated to this file.
+  + Make a visualization of this.
+
+
+```{r read_data}
+
+data <- as.matrix(read.table("/cloud/project/docs/data/data1.txt"))
+
+## Some comments about the data and data types.
+
+```
+
+```{r graphic_data}
+
+hist(data, freq = FALSE)
+
+
+## Be careful about getting conclusions
+
+data1_min = min(data)
+data1_max = max(data)
+
+hist(data, freq = FALSE, breaks = seq(data1_min, data1_max, length = 10))
+
+```
+
+We guess a Gaussian distribution.
+
+How to estimate the parameters of the distribution?
+
+1. Compute the empirical mean and statistical variance.
+2. Plot the theoretical density that we guess.
+3. Test the goodness of fitness.
+
+
+Compute the empirical mean and statistical variance.
+
+```{r compute_parameters}
+
+mhu <- mean(data)
+
+# When you compute the variance be careful and read the documentation
+# in this case we have:
+# "The denominator n - 1 is used which gives an unbiased estimator of the (co)variance 
+# for i.i.d. observations"
+
+sigma2 <- var(data)
+
+## You also can do it manually:
+
+sigma2 <- 1/(nrow(data)-1)*sum((data - mean(data))^2)
+
+```
+
+Plot the theoretical density that we guess.
+
+```{r get_hit_info}
+
+## This generates a list, with all the hist information.
+
+H <- hist(data, freq = FALSE, plot = FALSE) ## ignore warning message
+H
+
+```
+```{r make_comparison}
+
+## Histogram info to use.
+limits <- H$breaks
+lmin <- limits[1]
+lmax <- limits[length(limits)]
+
+## Create our plot
+
+x <- seq(lmin, lmax, by = 0.01)
+y <- dnorm(x, mhu, sqrt(sigma2))
+
+
+y_max = max(y, H$density)
+
+## Make the comparison 
+
+hist(data, freq = FALSE, xlim = c(lmin, lmax), ylim = c(0, y_max*1.01))
+par(new = TRUE)
+plot(x, y, type = 'l', col = 'red'
+     , xlim = c(lmin, lmax)
+     , ylim = c(0, y_max*1.01)
+     , xlab = ""
+     , ylab = "")
+```
+
+Test the goodness of fitness.
+
+```{r test_results}
+
+ks.test(x, 'pnorm', mhu, sqrt(sigma2))
+
+```
+
+### Data set 2
+
+```{r}
+
+## Loading the data
+A <- as.matrix(read.table("/cloud/project/docs/data/data2.txt"))
+
+
+## Make visualizations
+
+hist(A, freq = FALSE)
+## The right box exist because r creates one class with just one element.
+
+## There is a formula that generates the right amount of classes, given by:
+
+## K aproxx 1 + 3.22*log(n, 10) ## (in practice take the floor)
+
+
+
+## Use right parameters:
+
+n = length(A)
+K = floor(1 + 3.22*log(n, 10))
+A_min = min(A)
+A_max = max(A)
+
+A_mp = (A_max - A_min)/K
+
+epsilon = (A_max - A_min)/10^9
+
+limits = seq(A_min, A_max, by = A_mp)
+
+
+hist(A, freq = FALSE, breaks = limits)
+
+## We guess is an uniform distribution
+
+## Make start in 0
+
+A_zero = A - min(A)
+
+A_min = min(A_zero)
+A_max = max(A_zero)
+hist(A_zero, freq = FALSE, breaks = seq(A_min, A_max, length = 10))
+
+## Estimate the parameter
+
+n <- length(A_zero)
+
+theta <- ((n+1)/n)*max(A_zero)
+
+## Create our theoretical density plot
+
+
+H <- hist(A_min, freq = FALSE, plot = FALSE) ## ignore warning message
+## Histogram info to use.
+limits <- H$breaks
+lmin <- limits[1]
+lmax <- limits[length(limits)]
+
+## Create our plot
+
+x <- seq(lmin, lmax, by = 0.01)
+y <- dunif(x, min = lmin, max = theta )
+
+y_max = max(y, H$density)
+
+## Make the comparison 
+
+hist(A_min, freq = FALSE, xlim = c(lmin, lmax), ylim = c(0, y_max*1.01))
+par(new = TRUE)
+plot(x, y, type = 'l', col = 'red'
+     , xlim = c(lmin, lmax)
+     , ylim = c(0, y_max*1.01)
+     , xlab = ""
+     , ylab = "")
+
+
+```
+
+
+## Discrete case
+
+
+data4.txt
+
+```{r}
+
+
+
+## Loading the data
+A <- as.matrix(read.table("/cloud/project/docs/data/data4.txt"))
+
+barplot(table(A)/length(A))
+
+## A binomial distribution can be approach by a Gaussian distribution.
+
+## Methods of moments
+## Don't forget to correct the estimation of np to be an integer.
+## and then correct the ph value 
+
+
+
+
+m = mean(A)
+s2 = var(A)*(499/500)
+
+ph = 1-s2/m
+nh = m/ph
+
+nh
+
+nh = 10
+
+ph = m/nh
+
+ph
+
+```
+
+data5.txt
+
+```{r}
+
+
+## Loading the data
+A <- as.matrix(read.table("/cloud/project/docs/data/data5.txt"))
+
+barplot(table(A)/length(A))
+
+## A binomial distribution can be approach by a Gaussian distribution.
+
+## Methods of moments
+## Don't forget to correct the estimation of np to be an integer.
+## and then correct the ph value 
+
+
+m = mean(A)
+s2 = var(A)*(499/500)
+
+ph = 1-s2/m
+nh = m/ph
+
+nh
+
+nh = 7
+
+ph = m/nh
+
+ph
+
+## When p is small is very hard to get correct estimations of n when you 
+## don't have enough number of observations
+```
+
+
+
+
+
 
