@@ -1,6 +1,6 @@
 ---
-title: Notes FSML II
-thanks: Replication files are available on the author's Github account (http://github.com/svmiller/svm-r-markdown-templates). 
+title: Course Notes for FSML Part II
+thanks: Replication files are available on the author's Github account (https://github.com/tobias-chc/FSML_II). 
 author:
   name: Tobías Chavarría
   affiliation: DSTI | DSBD2-001
