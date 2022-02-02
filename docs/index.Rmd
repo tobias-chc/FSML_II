@@ -316,7 +316,7 @@ boxplot(m)
 
 ```
 
-2. Let consider $X_1, ..., X_n$  *i.i.d*  $ \mathcal{U}([0, \sigma])$.
+2. Let consider $X_1, ..., X_n$  *i.i.d*  $\mathcal{U}([0, \sigma])$.
 
   + Determine an estimator of $\sigma$ using the methods of moments.
   + Let denote $\hat{\sigma}_n = 2\overline{X}_n$. 
@@ -324,41 +324,245 @@ boxplot(m)
 
 **Solution:**
 
+Let $X \sim \mathcal{U}([0, \sigma])$.
+
+
+\begin{align*}
+\mathbb{E}(X) = \int_{\mathbb{R}} x\cdot f_X dx = \int_{\mathbb{R}} x\cdot \dfrac{1}{\sigma}\cdot \mathbf{1}_{[0, \sigma]} dx = \dfrac{1}{\sigma}\int_{0}^{\sigma} x dx = \dfrac{1}{\sigma} \dfrac{x^2}{2} \Big|_0^\sigma = \dfrac{\sigma}{2} 
+\end{align*}
+
+By the method of moments, we get that an estimator $\hat{\sigma}_n$ is solution of:
+
+$\dfrac{\hat{\sigma}_n}{2} = \dfrac{1}{n}\sum X_i = \overline{X}_n$
+
+Thus:
+
+$$\hat{\sigma}_n = 2\overline{X}_n$$
+since $\hat{\sigma}_n$ it is a function of $X_1, ..., X_n$ it's an estimator.
+
+Let's compute the bias for this estimator, let $n \in \mathbb{N}^*$.
+
+$b(\hat{\sigma}_n ) = \mathbb{E}(\hat{\sigma}_n) - \sigma$
+
+First, compute the expected value of $\hat{\sigma}_n$:
+
+
+\begin{align*}
+\mathbb{E}(\hat{\sigma}_n) &= \mathbb{E}(2\overline{X}_n)\\
+&=    \mathbb{E}\bigg[\dfrac{2}{n}\sum X_i\bigg]\\
+&=    \dfrac{2}{n}\sum\mathbb{E}[ X_i] \quad\text{(by linearity)}\\
+&=    \dfrac{2}{n} \cdot n \cdot\mathbb{E}[X_1] \quad\text{(because are identically distributed)}\\
+&=    \sigma
+\end{align*}
+
+
+Therefore $b(\hat{\sigma}_n ) = 0$ and then we conclude that $\hat{\sigma}_n = \overline{X}_n$ is an unbiased estimator for $\sigma$.
+
+3. Let consider $X_1, ..., X_n$  *i.i.d*  $\mathcal{U}([-\sigma, \sigma])$.
+
+Since $\mathbb{E}[X_1] = 0 \quad \text{(not a function of } \sigma)$
+
+we can't use the first moment, then we use the second moment:
+
+$V[X_1] = \dfrac{\sigma^2}{3}$
+
+then we have:
+
+$$\hat{\sigma}_n = \sqrt{\dfrac{3}{n}\sum(X_i - \overline{X}_n)^2}$$
+
 #### The Maximum Likelihood
 
 
 ##### Likelihood
 
 **Definition:** Let $X_1, ..., X_n$ independent random variables, whose distributions are all depending
-on the same parameter $\Theta$.
+on the same parameter $\theta$.
 
 Let $x_1, ..., x_n$ observations of those r.v
 
 $$
-\mathcal{L}(x_1, ..., x_n, \Theta) = \begin{cases} \Pi{} \\ \Pi \end{cases}
+\mathcal{L}(x_1, ..., x_n, \theta) = \begin{cases} \displaystyle \prod_{i =1}^{n} P_{\theta}(X_i = x_i) \quad \text{(discrete framework)} \\ 
+\displaystyle \prod_{i =1}^{n} f_{X_i, \theta}(X_i = x_i) \quad \text{(continuous framework)}
+\end{cases}
 $$
 
-**Def:** Estimator thanks to the maximum likelihood.
+where $f_{X_i, \theta}$  are the density function of $X_i$.
 
-$\hat{\Theta}_n$, an estimator for $\Theta$, due to the maximum likelihood, is solution of:
+
+##### Estimator thanks to the maximum likelihood
+
+**Definition:** $\hat{\theta}_n$, an estimator for $\theta$, due to the maximum likelihood, is solution of:
 
 
 $$
-\mathcal{L}(x_1, ..., x_n, \Theta) = \max_{\theta} \mathcal{L}(x_1, ..., x_n, \Theta)
+\mathcal{L}(x_1, ..., x_n, \theta) = \max_{\theta} \mathcal{L}(x_1, ..., x_n, \theta)
 $$
 
-*Applications*
 
-Let consider $X_1, ..., X_n$ $\xi(\lambda)$ *i.i.d*.
+#### Applications
 
-Compute the maximum likelihood estimator.
+1. Let consider $X_1, ..., X_n$ $\xi(\lambda)$ *i.i.d*. Compute the maximum likelihood estimator.
 
-Solution:
+**Solution:**
 
-...
+Let $x_1, ..., x_n \in \mathbb{R}$.
 
 
-```{r}
+\begin{align*}
+\mathcal{L}(x_1, ..., x_n, \theta) &= \displaystyle \prod_{i =1}^{n} \lambda e^{-\lambda x_i}\cdot\mathbf{1}_{x_i \geq 0} \\
+&=    \lambda^n e^{-\lambda \sum x_i}\cdot \mathbf{1}_{\min{(x_i) \geq 0}}  
+\end{align*}
+
+
+we need to maximize with respect to $\lambda$, since $\mathbf{1}_{\min(x_i)}$ does not depend on $\lambda$ we can forget it, and consider:
+
+$$h(\lambda) = \lambda^n e^{-\lambda \sum x_i}$$
+
+taking $\log$ in both sides, with get a better expression to deal with.
+
+
+$$g(\lambda) = \log(h(\lambda)) = \log(\lambda^n e^{-\lambda \sum x_i}) = n\log(\lambda) - \lambda \sum x_i$$
+Since
+
+$g'(\lambda) = \dfrac{n}{\lambda} -  \sum x_i$ then $\lambda = \dfrac{n}{ \sum x_i} = \dfrac{1}{\overline{X}_n}$ is critical point.
+
+and $g''(\lambda) = \dfrac{-n}{\lambda^2} <0$ then this critical point correspond to a maximum. 
+
+So, $\lambda = \dfrac{1}{\overline{X}_n}$ is solution of the maximization problem and therefore the *Maximum likelihood estimator* is:
+
+$$\hat{\lambda}_n = \dfrac{n}{ \sum X_i}$$
+
+
+2. Let consider $X_1, ..., X_n$  *i.i.d* $\mathcal{U}([0, \theta])$
+  + Compute the maximum likelihood estimator.
+  + Compute the bias of this estimator and transform it into an unbiased one.
+
+
+**Solution:**
+
+Compute the maximum likelihood estimator:
+
+\begin{align*}
+\mathcal{L}(x_1, ..., x_n, \theta) &= \displaystyle \prod_{i =1}^{n} f_{\theta}(x_i) \\
+&=    \prod_{i =1}^{n} \dfrac{1}{\theta}\cdot \mathbf{1}_{[0, \theta]}(x_i)  \\
+&= \dfrac{1}{\theta^n} \cdot \mathbf{1}_{\min (x_i) \geq 0} \cdot \mathbf{1}_{\max(x_i) \leq \theta}
+\end{align*}
+
+Since $\mathbf{1}_{\min (x_i) \geq 0}$ does not depend on $\lambda$ we can forget it, and consider:
+
+$$g(\lambda) = \dfrac{1}{\theta^n} \cdot \mathbf{1}_{\max(x_i) \leq \theta} = \dfrac{1}{\theta^n} \cdot \mathbf{1}_{[\max(x_i), +\infty[} (\theta)$$
+
+we can't compute $g'$ since this function it's not derivable in all points.
+
+But since the function $\dfrac{1}{t^n}$ it's decreasing we can conclude that the maximum estimator likelihood is given by:
+
+$$
+\hat{\theta}_n = \max(X_i)
+$$
+
+Compute the bias of this estimator and transform it into an unbiased one.
+
+In order to compute the bias of this estimator, we have to compute: $\mathbb{E}(\hat{\theta}_n) = \mathbb{E}(\max(X_i))$.
+
+To do this we need to determine the density function of this new random variable $\max(X_i)$.
+
+**How to compute a density?**
+
+1. First step: Computation of the distribution function.
+
+Let $t \in \mathbb{R}$.
+
+
+\begin{align*}
+F_{\hat{\theta}_n}(t) &= P(\hat{\theta}_n \leq t) \\
+&=    P(\max(X_i) \leq t)  \\
+\iff \\
+&    P(X_1 \leq t, ..., X_n \leq t) \\
+&=    \displaystyle \prod_{i =1}^{n} P(X_i \leq t) \quad \text{(by independency of the r.v)} \\
+&=    (P(X_1 \leq t))^n \quad \text{(because they are identically distributed.)}
+\end{align*}
+
+
+Since
+
+$$
+P(X_1 \leq t) = \int_{-\infty}^{t} \dfrac{1}{\theta} \mathbb{1}_{[0, \theta]}(x)dx = 
+\begin{cases}
+  0  &  t < 0 \\ \\
+  \dfrac{t}{\theta} & t \in [0,\theta] \\\\
+  1 & t >1
+\end{cases}
+$$
+
+We conclude:
+
+$$
+F_{\hat{\theta}_n}(t) =
+\begin{cases}
+  0  &  t < 0 \\\\
+  \dfrac{t^n}{\theta^n} & t \in [0,\theta] \\\\
+  1 & t >1
+\end{cases}
+$$
+
+2. Second step: Computation of the density function.
+
+Using the relation between the distribution and density function we have:
+
+$$
+f_{\hat{\theta}_n}(t) = F'_{\hat{\theta}_n}(t) = n\cdot\dfrac{t^{n-1}}{\theta^n}\cdot\mathbf{1}_{[0, \theta]}(t)
+$$
+
+3. Third step: Computation of $\mathbb{E}(\hat{\theta}_n)$
+
+$$ \mathbb{E}[\hat{\theta}_n] = \int_{\mathbb{R}} x \cdot f_{\hat{\theta}_n}(x) dx = \dfrac{n}{n+1} \theta$$
+
+Now we have:
+
+$$ b(\hat{\theta}_n) = \mathbb{E}[\hat{\theta}_n] - \theta = -\dfrac{\theta}{n+1} \neq 0$$
+
+Therefore $\hat{\theta}_n$ is not an unbiased estimator for $\theta$. But since $\displaystyle \lim_{n\to\infty} b(\hat{\theta}_n) = 0$ it is an asymptotically unbiased estimator for $\theta$.
+
+
+**How to obtain an unbiased estimator?**
+
+- First attempt: 
+
+We have $\mathbb{E}[\hat{\theta}_n] - \theta = -\dfrac{\theta}{n+1}$, then:
+
+\begin{align*}
+\mathbb{E}[\hat{\theta}_n] - \theta + \dfrac{\theta}{n+1} &= 0 \\
+ \iff & \\
+\mathbb{E}\bigg[\hat{\theta}_n + \dfrac{\theta}{n+1}\bigg] - \theta  &= 0 \\
+\end{align*}
+
+It is ok to consider $\tilde{\theta}_n = \hat{\theta}_n + \dfrac{\theta}{n+1}$ as unbiased estimator of $\theta$?
+
+The answer is **no**, $\tilde{\theta}_n$ depends on an unkonown parameter ($\theta$ in this case), so by definition it is not an estimator!
+
+
+- Second attempt: 
+
+We have:
+
+
+\begin{align*}
+\mathbb{E}[\hat{\theta}_n] - \theta =- \dfrac{\theta}{n+1} &= 0 \\
+ \iff & \\
+\mathbb{E}[\hat{\theta}_n] = \theta - \dfrac{\theta}{n+1}  \\
+ \iff & \\
+\mathbb{E}[\hat{\theta}_n] = \dfrac{n}{n+1}\theta \\
+ \iff & \\
+\mathbb{E}\bigg[\dfrac{n+1}{n}\hat{\theta}_n\bigg] = \theta \\
+ \iff & \\
+\mathbb{E}\bigg[\dfrac{n+1}{n}\hat{\theta}_n\bigg] - \theta = 0\\
+\end{align*}
+
+Thus, $\dfrac{n+1}{n}\hat{\theta}_n$ is an unbiased estimator for $\theta$.
+
+```{r estimator_unif}
+
+## Comparing the estimators for the uniform distribution.
 
 n= 100
 
@@ -406,20 +610,23 @@ mean(theta)
 
 boxplot(theta)
 
-
 ```
 
+#### Property
 
-**Property**
+Let $X_1, ..., X_n$ *i.i.d* random variables.
 
-Let $X_1, ..., X_n$ *i.i.d* r.v.
-Let $\mu = \mathbb{E}[X_1]$ (unknown)
-Let $\sigma^2 = V(X_1)$ (unknown)
+- Let $\mu = \mathbb{E}[X_1]$ (unknown)
+- Let $\sigma^2 = V[X_1]$ (unknown)
 
-A classical estimator is:
+A classical estimator for:
 
-- $\mu$ is $\hat{\mu}_n = \overline{X}_n = \frac{1}{n} \sum X_i$
-- $\sigma^2$ is $\hat{\sigma}^2_n = \frac{1}{n} \sum (X_i - \overline{X}_n)^2$
+- $\mu$ is 
+$$\hat{\mu}_n = \overline{X}_n$$
+
+- $\sigma^2$ is 
+
+$$\hat{\sigma}_n^2 = \dfrac{1}{n} \sum(X_i - \overline{X}_n)^2$$
 
 
 **Exercise**
@@ -431,10 +638,10 @@ Show that:
 
 
 
--- Day 2 --
+## Day 2 (In progress)
 
-Solution exercise
-Theorem
+- Solution exercise
+- Theorem
 
 ### Quality of an estimator
 
@@ -443,6 +650,7 @@ mean quadratic error is given by:
 
 
 **Property:** 
+
 $$MQE = V[\hat{\theta}_n] + ((b(\hat{\theta}_n)))^2$$
 
 **Proof:**
@@ -454,7 +662,7 @@ MQE(\hat{\theta}_n) = ...
 ##theory##
 
 
-## Practical class
+### Practical class
 
 1. Load the data in R software.
 2. Propose a model for the variables associated to this file.
@@ -636,7 +844,7 @@ plot(x, y, type = 'l', col = 'red'
 ```
 
 
-## Discrete case
+### Discrete case
 
 
 data4.txt
@@ -711,7 +919,124 @@ ph
 ```
 
 
+## Day 3 (In progress)
+
+
+### Confidence interval
+
+```{r}
+m1 = c()
+
+for (i in 1:50) {
+  A = rnorm(500, 2, 1)
+  
+  m1 = c(m1, mean(A))
+}
+
+boxplot(A)
+
+## Increase the number of observations
+
+m2 = c()
+
+for (i in 1:50) {
+  B = rnorm(2000, 2, 1)
+  
+  m2 = c(m2, mean(B))
+}
+
+boxplot(B)
+
+
+## Change the variance
+
+m3 = c()
+
+for (i in 1:50) {
+  C = rnorm(2000, 2, 10)
+  
+  m3 = c(m3, mean(C))
+}
+
+boxplot(C)
+
+## Create a data frame with all the observations
+
+a = c(m1, m2, m3)
+r = rep(c("A", "B", "C"), each = 50)
+
+S = data.frame(x = a, l = r)
+```
+In this plot we can see that the approximation depends on the number of observations and the variance of the sample.
+
+```{r}
+boxplot(S$x ~ S$l)
+```
 
 
 
+
+### Chi squared distribution
+
+```{r}
+x = seq(0.1, 10, by =0.01)
+
+y1 = dchisq(x, 1)
+y2 = dchisq(x, 2)
+y3 = dchisq(x, 3)
+y4 = dchisq(x, 4)
+y6 = dchisq(x, 6)
+y9 = dchisq(x, 9)
+
+y_max = max(y1, y2, y3, y4, y6, y9)
+
+plot(x, y1, type = 'l', col = 'yellow', xlim = c(0, 10), ylim = c(0, 0.5))
+par(new = TRUE)
+plot(x, y2, type = 'l', col = 'green', xlim = c(0, 10), ylim = c(0, 0.5))
+par(new = TRUE)
+plot(x, y3, type = 'l', col = 'black', xlim = c(0, 10), ylim = c(0, 0.5))
+par(new = TRUE)
+plot(x, y4, type = 'l', col = 'blue', xlim = c(0, 10), ylim = c(0, 0.5))
+par(new = TRUE)
+plot(x, y6, type = 'l', col = 'pink', xlim = c(0, 10), ylim = c(0, 0.5))
+par(new = TRUE)
+plot(x, y9, type = 'l', col = 'red', xlim = c(0, 10), ylim = c(0, 0.5))
+```
+
+
+
+### t-student distribution
+
+```{r}
+x = seq(-10, 10, by =0.01)
+
+y1 = dt(x, 1)
+y2 = dt(x, 2)
+y3 = dt(x, 3)
+y4 = dt(x, 4)
+y6 = dt(x, 6)
+y20 = dt(x, 20)
+
+y_norm = dnorm(x)
+
+y_max = max(y1, y2, y3, y4, y6, y9)
+
+plot(x, y1, type = 'l', col = 'yellow', xlim = c(-10, 10), ylim = c(0, y_max))
+par(new = TRUE)
+plot(x, y2, type = 'l', col = 'green', xlim = c(-10, 10), ylim = c(0, y_max))
+par(new = TRUE)
+plot(x, y3, type = 'l', col = 'black', xlim = c(-10, 10), ylim = c(0, y_max))
+par(new = TRUE)
+plot(x, y4, type = 'l', col = 'blue', xlim = c(-10, 10), ylim = c(0, y_max))
+par(new = TRUE)
+plot(x, y6, type = 'l', col = 'pink', xlim = c(-10, 10), ylim = c(0, y_max))
+par(new = TRUE)
+plot(x, y20, type = 'l', col = 'red', xlim = c(-10, 10), ylim = c(0, y_max))
+par(new = TRUE)
+plot(x, y_norm, type = 'l', col = 'black', xlim = c(-10, 10), ylim = c(0, y_max))
+
+
+## A t-student distribution with a big enough k approach a Gaussian distribution
+
+```
 
