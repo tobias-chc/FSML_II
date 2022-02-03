@@ -19,7 +19,7 @@ output:
     latex_engine: xelatex
     keep_tex: false ## Change to true if want keep intermediate .tex file
     toc: true
-    toc_depth: 3
+    toc_depth: 4
     dev: cairo_pdf
     # fig_width: 7 ## Optional: Set default PDF figure width
     # fig_height: 6 ## Optional: Set default PDF figure height
@@ -30,13 +30,16 @@ output:
         --template=tex/mytemplate.tex ## For affiliation field. See: https://bit.ly/2T191uZ
 always_allow_html: true
 urlcolor: blue
-mainfont: cochineal
+# sansfont: Linux Biolinum O
+# fontsize: 11pt
+# mainfont: cochineal
 ## Automatically knit to both formats:
 knit: (function(inputFile, encoding) {
  rmarkdown::render(inputFile, encoding = encoding, 
  output_format = 'all') 
  })
 ---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -75,8 +78,8 @@ $Y_i = \beta_0 + \beta_1X^{1}_i + ... + \beta_pX^{p}_i + \varepsilon_i$
 where:
 
 - $\beta_0, ..., \beta_p$ are unknown *fixed* parameters that can be estimated by two methods: 
-  - Point estimation
-  - Confidence interval
+- Point estimation
+- Confidence interval
 - $\varepsilon$ is the noise and also a random variable.
 
 
@@ -85,12 +88,12 @@ where:
 **Previous Knowledge**
 
 - Random Variable: 
- - The notion of distribution.
- - The expectation and variance
- - The distribution function
- - The classical distributions (in particular the Gaussian)
- - The Law of Large numbers and the Central Limit theorem
- 
+- The notion of distribution.
+- The expectation and variance
+- The distribution function
+- The classical distributions (in particular the Gaussian)
+- The Law of Large numbers and the Central Limit theorem
+
 ### Introduction
 
 Given $x_1, ..., x_n$ numeric observations, to try to find a correct parametric model, we can use 2 [graphs](https://chartio.com/learn/charts/histogram-complete-guide/):
@@ -107,10 +110,10 @@ Given $x_1, ..., x_n$ numeric observations, to try to find a correct parametric 
 max.temp <- c(22, 27, 26, 24, 23, 26, 28)
 
 barplot(max.temp,
-main = "Maximum Temperatures in a Week",
-xlab = "Degree Celsius",
-ylab = "Day",
-names.arg = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
+        main = "Maximum Temperatures in a Week",
+        xlab = "Degree Celsius",
+        ylab = "Day",
+        names.arg = c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"))
 ```
 
 
@@ -151,9 +154,9 @@ To propose a parametric model:
 
 Pasarlos a R!!
 
-Example 2: ![](/cloud/project/docs/images/model_1.png)
+Example 1: ![](images/model_1.png)
 
-Example 2: ![](/cloud/project/docs/images/model_2.png)
+Example 2: ![](images/model_2.png)
 
 **Question:** with a representation, we can guess a parametric family of models, denoted by 
 $\{P_{\Theta}, \theta \in \Theta \}$.
@@ -206,8 +209,8 @@ $$b(\hat{\theta}_n) \rightarrow 0 \\ n \rightarrow +\infty$$
 **How to construct  estimator?**
 
 - Method of moments
-  - less computations
-  - based on the Law of large numbers
+- less computations
+- based on the Law of large numbers
 
 - Maximum likelihood
 
@@ -318,9 +321,9 @@ boxplot(m)
 
 2. Let consider $X_1, ..., X_n$  *i.i.d*  $\mathcal{U}([0, \sigma])$.
 
-  + Determine an estimator of $\sigma$ using the methods of moments.
-  + Let denote $\hat{\sigma}_n = 2\overline{X}_n$. 
-  Is $\hat{\sigma}_n$ an unbiased estimator?
++ Determine an estimator of $\sigma$ using the methods of moments.
++ Let denote $\hat{\sigma}_n = 2\overline{X}_n$. 
+Is $\hat{\sigma}_n$ an unbiased estimator?
 
 **Solution:**
 
@@ -434,8 +437,8 @@ $$\hat{\lambda}_n = \dfrac{n}{ \sum X_i}$$
 
 
 2. Let consider $X_1, ..., X_n$  *i.i.d* $\mathcal{U}([0, \theta])$
-  + Compute the maximum likelihood estimator.
-  + Compute the bias of this estimator and transform it into an unbiased one.
++ Compute the maximum likelihood estimator.
++ Compute the bias of this estimator and transform it into an unbiased one.
 
 
 **Solution:**
@@ -488,9 +491,9 @@ Since
 $$
 P(X_1 \leq t) = \int_{-\infty}^{t} \dfrac{1}{\theta} \mathbb{1}_{[0, \theta]}(x)dx = 
 \begin{cases}
-  0  &  t < 0 \\ \\
-  \dfrac{t}{\theta} & t \in [0,\theta] \\\\
-  1 & t >1
+0  &  t < 0 \\ \\
+\dfrac{t}{\theta} & t \in [0,\theta] \\\\
+1 & t >1
 \end{cases}
 $$
 
@@ -499,9 +502,9 @@ We conclude:
 $$
 F_{\hat{\theta}_n}(t) =
 \begin{cases}
-  0  &  t < 0 \\\\
-  \dfrac{t^n}{\theta^n} & t \in [0,\theta] \\\\
-  1 & t >1
+0  &  t < 0 \\\\
+\dfrac{t^n}{\theta^n} & t \in [0,\theta] \\\\
+1 & t >1
 \end{cases}
 $$
 
@@ -532,7 +535,7 @@ We have $\mathbb{E}[\hat{\theta}_n] - \theta = -\dfrac{\theta}{n+1}$, then:
 
 \begin{align*}
 \mathbb{E}[\hat{\theta}_n] - \theta + \dfrac{\theta}{n+1} &= 0 \\
- \iff & \\
+\iff & \\
 \mathbb{E}\bigg[\hat{\theta}_n + \dfrac{\theta}{n+1}\bigg] - \theta  &= 0 \\
 \end{align*}
 
@@ -548,13 +551,13 @@ We have:
 
 \begin{align*}
 \mathbb{E}[\hat{\theta}_n] - \theta =- \dfrac{\theta}{n+1} &= 0 \\
- \iff & \\
+\iff & \\
 \mathbb{E}[\hat{\theta}_n] = \theta - \dfrac{\theta}{n+1}  \\
- \iff & \\
+\iff & \\
 \mathbb{E}[\hat{\theta}_n] = \dfrac{n}{n+1}\theta \\
- \iff & \\
+\iff & \\
 \mathbb{E}\bigg[\dfrac{n+1}{n}\hat{\theta}_n\bigg] = \theta \\
- \iff & \\
+\iff & \\
 \mathbb{E}\bigg[\dfrac{n+1}{n}\hat{\theta}_n\bigg] - \theta = 0\\
 \end{align*}
 
@@ -637,17 +640,98 @@ Show that:
 2. $\hat{\sigma}^2_n$ is biased and that $\dfrac{n}{n-1}\hat{\sigma}^2_n$ is unbiased.
 
 
+**Solution:**
 
-## Day 2 (In progress)
+1. 
 
-- Solution exercise
-- Theorem
+\begin{align*}
+\mathbb{E}[\hat{\mu}_n] &= \mathbb{E}\bigg[\dfrac{1}{n} \sum X_i\bigg] \\
+&=    \dfrac{1}{n}\sum \mathbb{E}[X_i] \quad \text{(by linearity)} \\
+&=    \dfrac{1}{n}n\cdot  \mathbb{E}[X_1] \quad \text{(as they are indentically distributed)} \\
+&= \mathbb{E}[X_1]  
+\end{align*}
 
-### Quality of an estimator
 
-**def:** Let $\theta$ an unknown parameter, let $\hat{\theta}_n$ an estimator of $\theta$,
-mean quadratic error is given by:
+Therefore: $\hat{\mu}_n = \overline{X}_n$ is an unbiased estimator for $\mu$.
 
+2.
+
+First note that we can rewrite $\hat{\sigma}_n^2$ as follows:
+
+
+\begin{align*}
+\hat{\sigma}_n^2 &= \dfrac{1}{n} \sum_{i =1}^n(X_i - \overline{X}_n)^2 \\
+&=    \dfrac{1}{n} \sum_{i =1}^n \big(X_i^2 - 2X_i\overline{X}_n + \overline{X}_n^2\big) \\
+&=    \dfrac{1}{n} \sum_{i =1}^n X_i^2 - 2\overline{X}_n \bigg(\dfrac{1}{n} \sum_{i =1}^n X_i\bigg)+ \overline{X}_n^2 
+\quad \text{(check that factors that depends on i)} \\
+&=    \dfrac{1}{n} \sum_{i =1}^n X_i^2 - 2\overline{X}_n^2 + \overline{X}_n^2 \\ 
+&=    \dfrac{1}{n} \sum_{i =1}^n X_i^2 - \overline{X}_n^2 \\ 
+\end{align*}
+
+
+Now use this expression to compute the expectation:
+
+\begin{align*}
+\mathbb{E}[\hat{\sigma}_n^2] &= \mathbb{E}\bigg[\dfrac{1}{n} \sum_{i =1}^n X_i^2 - \overline{X}_n^2\bigg] \\
+&=    \dfrac{1}{n}\sum_{i =1}^n\mathbb{E}[X_i^2] - \mathbb{E}\bigg[\overline{X}_n^2\bigg] \quad \text{(by linearity)} \\
+&=    \dfrac{1}{n}\sum_{i =1}^n (V[X_i] +\mathbb{E}[X_i]^2) - ( V[\overline{X}_n] +\mathbb{E}[\overline{X}_n]^2) \quad \text{(by using the variance formula)} \\
+&=    \sigma^2 + \mu^2 -  V[\overline{X}_n] - \mu^2 \quad \text{(by substituting the expressions of the variance and expectation)} \\
+&=    \sigma^2 -  V[\overline{X}_n]
+\end{align*}
+
+Now lets compute $V[\overline{X}_n]$:
+
+\begin{align*}
+V[\overline{X}_n] &= V\bigg[\dfrac{1}{n} \sum_{i =1}^n X_i \bigg] \\
+&=    \dfrac{1}{n^2} V\bigg[\sum_{i =1}^n X_i \bigg] \quad \text{(by linearity)} \\
+&=    \dfrac{1}{n^2} \sum_{i =1}^n  V[X_i] \quad \text{(because they are indepent)}  \\
+&=    \dfrac{\sigma^2}{n}
+\end{align*}
+
+
+Putting all together we get:
+
+$$
+b(\hat{\sigma}_n^2) = \mathbb{E}[\hat{\sigma}_n^2] - \sigma^2 =  -  V[\overline{X}_n] =  -  \dfrac{\sigma^2}{n} 
+$$
+
+so $\hat{\sigma}_n^2$ is an biased estimator.
+
+But we can modify it to obtain an unbiased version by noticed that:
+
+$$ \mathbb{E}\bigg[\dfrac{n}{n-1}\hat{\sigma}_n^2\bigg]=\sigma^2$$
+Therefore:
+
+$$\hat{\sigma}_{n-1}^2 = \dfrac{n}{n-1}\hat{\sigma}_n^2 = \dfrac{1}{n-1} \sum_{i=1}^n(X_i - \overline{X}_n)^2$$
+
+is an unbiased estimator for $\sigma^2$.
+
+#### Theorem
+
+Let $X_1, ..., X_n$ *i.i.d* with $\mu = \mathbb{E}[X_1]$ and $\sigma^2 = V[X_1]$.
+
+- An unbiased estimator for $\mu$ is:
+ 
+ $$
+ \hat{\mu}_n = \overline{X}_n \quad \text{and it's variance is} \quad \dfrac{\sigma^2}{n}
+ $$
+ 
+- An unbiased estimator for $\sigma^2$ is:
+ 
+ $$
+ \hat{\sigma}_{n-1}^2 = \dfrac{1}{n-1} \sum_{i=1}^n(X_i - \overline{X}_n)^2
+ $$
+ 
+#### Quality of an estimator
+
+##### Mean Quadratic Error
+
+**Definition:** Let $\theta$ an unknown parameter, let $\hat{\theta}_n$ an estimator of $\theta$, the
+mean quadratic error (MQE) is given by:
+
+$$
+MQE(\hat{\sigma}_n) = \mathbb{E}[(\hat{\sigma}_n - \sigma)^2]
+$$
 
 **Property:** 
 
@@ -655,23 +739,129 @@ $$MQE = V[\hat{\theta}_n] + ((b(\hat{\theta}_n)))^2$$
 
 **Proof:**
 
-\begin{equation}
-MQE(\hat{\theta}_n) = ...
-\end{equation}
+Lets rewrite the $MQE$ definition.
 
-##theory##
+
+\begin{align*}
+MQE(\hat{\theta}_n) &= \mathbb{E}[(\hat{\sigma}_n - \sigma)^2] \\
+&=    \mathbb{E}[(\hat{\sigma}_n - \mathbb{E}[\hat{\sigma}_n] + \mathbb{E}[\hat{\sigma}_n] - \sigma)^2] \quad \text{(by adding and substracting yhe same thing)}\\
+&=    \underbrace{\mathbb{E}[(\hat{\sigma}_n - \mathbb{E}[\hat{\sigma}_n])^2]}_{V[\hat{\sigma}_n]} 
+  + \underbrace{\mathbb{E}[(\mathbb{E}[\hat{\sigma}_n] - \sigma)^2]}_{\mathbb{E}[b(\hat{\sigma}_n)]^2}
+  +2\underbrace{\mathbb{E}[(\hat{\sigma}_n - \mathbb{E}[\hat{\sigma}_n])(\mathbb{E}[\hat{\sigma}_n] - \sigma)]}_{A_n} 
+\end{align*}
+
+So to proof our result we just need to proof that $A_n = 0$.
+
+\begin{align*}
+A_n &= \mathbb{E}[\underbrace{(\mathbb{E}[\hat{\sigma}_n] - \sigma)}_{b(\hat{\sigma}_n)} \cdot(\hat{\sigma}_n - \mathbb{E}[\hat{\sigma}_n])] \\
+&= \underbrace{b(\hat{\sigma}_n)}_{\text{deterministic term}} \cdot \mathbb{E}[\underbrace{(\hat{\sigma}_n - \mathbb{E}[\hat{\sigma}_n])}_{\text{this is a centeret r.v.}}] \quad{\text{(the expectation of a centered r.v is zero.)}} \\
+&= 0 
+\end{align*}
+
+
+##### Comparison of estimators
+
+**Definition:** Let $\theta$ an unknown parameter, $\hat{\theta}_{n, 1}$ and $\hat{\theta}_{n, 2}$ for $\theta$.
+
+$\hat{\theta}_{n, 1}$ is better than  $\hat{\theta}_{n, 2}$  if
+
+$$
+\forall n \geq 1, \quad MQE(\hat{\theta}_{n, 1}) \leq MQE(\hat{\theta}_{n, 2}) 
+$$
+
+
+#### Application
+
+Let $X_1, ..., X_n$ *i.i.d* $\mathcal{U}([0, \theta])$, compare the following estimators to see if one is better than the others.
+
+- $\hat{\theta}_{n, 1} = 2\overline{X}_n$ 
+- $\hat{\theta}_{n, 2} = \max({X}_n)$ 
+- $\hat{\theta}_{n, 3} = \frac{n+1}{n}\overline{X}_n$ 
+
+*Remember:*
+
+$f_{\hat{\theta}_{n, 2}}(t) = n\dfrac{t^{n-1}}{\theta^n} \mathbf{1}_{[0, \theta]}(t)$
+
+
+**Solution:**
+
+Lets compute the $MQE$ of each estimator.
+
+1. Since $\hat{\theta}_{n, 1}$ is an unbiased estimator for $\theta$, we have:
+
+
+\begin{align*}
+MQE(\hat{\theta}_{n,1}) &= V[\hat{\theta}_{n, 1}]   \\ 
+&=    V[2\overline{X}_n]    \\
+&=    4V[\overline{X}_n]   \\
+&=    4\sum_{n=1}^nV[X_1]   \quad \text{(by using i.i.d)}   \\
+&=    4\dfrac{\sigma^2}{12n} \quad \text{(check the variance of an uniform distribution)}
+\end{align*}
+
+
+Thus:
+
+$$MQE(\hat{\theta}_{n,1}) = \dfrac{\sigma^2}{3n}$$
+
+2. We already know that: $b(\hat{\theta}_{n,2}) = -\dfrac{\theta}{n+1}$ and $\mathbb{E}[\hat{\theta}_{n,2}] = \dfrac{n}{n+1}\theta$.
+
+We have to compute $V[\hat{\theta}_{n,2}]$, since
+
+$$
+V[\hat{\theta}_{n,2}] = \mathbb{E}[(\hat{\theta}_{n,2})^2] - \mathbb{E}[\hat{\theta}_{n,2}]^2
+$$
+and 
+
+$$
+\mathbb{E}[(\hat{\theta}_{n,2})^2] = \int_{\mathbb{R}}n\dfrac{t^{n-1}}{\theta^n} \mathbf{1}_{[0, \theta]}(t) dt = \dfrac{n}{n+2}\theta^2
+$$
+
+Therefore:
+
+
+\begin{align*}
+MQE(\hat{\theta}_{n,2}) &= V[\hat{\theta}_{n,2}] - b(\hat{\theta}_{n,2})^2    \\
+&=    \dfrac{n}{n+2}\theta^2 - \dfrac{n^2}{(n+1)^2}\theta^2 +\dfrac{1}{(n+1)^2}\theta^2 \\
+&=    \dfrac{2}{(n+1)(n+2)}\theta^2
+\end{align*}
+
+
+3. Since $\hat{\theta}_{n, 3}$ is an unbiased estimator for $\theta$, we have:
+
+
+\begin{align*}
+MQE(\hat{\theta}_{n,3}) &= V[\hat{\theta}_{n, 3}]  \\ 
+&=    V\bigg[\dfrac{n+1}{n}\hat{\theta}_{n, 2}\bigg]    \\
+&=    \dfrac{(n+1)^2}{n^2}V[\hat{\theta}_{n, 2}]   \\
+&=    \dfrac{(n+1)^2}{n^2}\cdot \dfrac{n}{(n+1)^2(n+2)}\theta^2  \\
+&=    \dfrac{1}{n(n+2)}\theta^2 
+\end{align*}
+
+It is easy to check that for $n\geq 1$:
+
+$$
+3n \leq \frac{(n+1)}{2}(n+2) \leq n(n+2)
+$$
+
+Thus
+
+$$
+MQE(\hat{\theta}_{n,3}) \leq MQE(\hat{\theta}_{n,2}) \leq MQE(\hat{\theta}_{n,1})
+$$
+
+and we conclude that $MQE(\hat{\theta}_{n,3})$ it's the best estimator for $\theta$.
 
 
 ### Practical class
 
 1. Load the data in R software.
 2. Propose a model for the variables associated to this file.
-  + Make a visualization of this.
++ Make a visualization of this.
 
 
 ```{r read_data}
 
-data <- as.matrix(read.table("/cloud/project/docs/data/data1.txt"))
+data <- as.matrix(read.table("data/data1.txt"))
 
 ## Some comments about the data and data types.
 
@@ -768,7 +958,7 @@ ks.test(x, 'pnorm', mhu, sqrt(sigma2))
 ```{r}
 
 ## Loading the data
-A <- as.matrix(read.table("/cloud/project/docs/data/data2.txt"))
+A <- as.matrix(read.table("data/data2.txt"))
 
 
 ## Make visualizations
@@ -854,7 +1044,7 @@ data4.txt
 
 
 ## Loading the data
-A <- as.matrix(read.table("/cloud/project/docs/data/data4.txt"))
+A <- as.matrix(read.table("data/data4.txt"))
 
 barplot(table(A)/length(A))
 
@@ -889,7 +1079,7 @@ data5.txt
 
 
 ## Loading the data
-A <- as.matrix(read.table("/cloud/project/docs/data/data5.txt"))
+A <- as.matrix(read.table("data/data5.txt"))
 
 barplot(table(A)/length(A))
 
@@ -1037,6 +1227,61 @@ plot(x, y_norm, type = 'l', col = 'black', xlim = c(-10, 10), ylim = c(0, y_max)
 
 
 ## A t-student distribution with a big enough k approach a Gaussian distribution
+
+```
+
+
+
+## Day 4 (In progress)
+
+
+### Use of t-student table
+
+
+### Confidence interval
+
+
+```{r central_limit_theorem}
+
+## We compute N observations of \overline{X}_n.
+
+
+## Number of r.v.
+n <- 5
+
+## Number of observations
+N <- 50000 
+
+## Parameter exp distribution.
+lambda <- 0.7
+
+## Create a matrix
+A <- matrix(rexp(n*N, lambda), ncol = n)
+
+## Compute the mean for each row
+M <- apply(A, 1, mean)  
+
+## Visualization for M
+
+hist(M, freq = F, breaks = 20)
+
+###
+
+Mo <- sort(M)
+y <- 1:N/N
+
+max_Mo <- max(Mo)
+
+x <- seq(0, max_Mo, by = 0.01)
+mu <- 1/lambda
+v <- 1/(lambda^2)/n
+
+yt <- pnorm(x, mu, sqrt(v))
+
+
+plot(Mo, y, type = 'l', xlim = c(0, max_Mo), ylim = c(0,1))
+par(new = TRUE)
+plot(x, yt, type = 'l', xlim = c(0, max_Mo), ylim = c(0,1), col = 'red')
 
 ```
 

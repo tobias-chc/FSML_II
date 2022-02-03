@@ -1,11 +1,14 @@
 
 # Course Notes for DSBD2-001: Foundations of Statistics and Machine Learning Part II
 
-## Motivation
+## Description
 
 As my first course as a full-time student at DSTI, I have decided 
-to start taking notes in a useful format (in my opinion) to review all 
+to start taking notes in an useful format (in my opinion) to review all 
 the contents in an easy and comprehensible way. 
+
+All the content is based on the classes of the professor Christine Malot
+who is a brilliant teacher.
 
 You can view the resulting output here:
 
