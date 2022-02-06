@@ -852,33 +852,154 @@ $$
 and we conclude that $MQE(\hat{\theta}_{n,3})$ it's the best estimator for $\theta$.
 
 
-### Practical class
+#### Theorem
+
+Let $\theta$ an unknown estimator and $\hat{\theta}_n$ an unbiased estimator of $\theta$.
+
+Cramer-Rao bound:
+
+$$
+V[\hat{\theta}_n] \geq \dfrac{1}{I_{n}(\theta)}
+$$
+
+where 
+
+$$
+I_n(\theta) = - \mathbb{E}\bigg[\dfrac{\partial^2 \log(\mathcal{L(x_1, ..., x_n; \theta)})}{\partial \theta^2}\bigg]
+$$
+
+is the *Fisher Information*.
+
+This is valid under certain conditions:
+
+- $I_n(\theta)$ should exist.
+- The possible values of $X_i$ should not depend on $\theta$. ($\mathcal{U}([0, \theta])$ not works.)
+
+#### Improve estimators.
+
+1. If you just have one estimator $\hat{\theta}_n$, you consider:
+
+$$
+\lambda\cdot\hat{\theta}_n
+$$
+
+with $\lambda \in \mathbb{R}^*$ and find $\lambda$ that minimize: 
+
+$$MQE(\lambda \hat{\theta}_n)$$
+
+2. If you have two estimators $\hat{\theta}_{n, 1}, \hat{\theta}_{n, 2}$.
+
+  + Construct:
+
+$$
+\hat{\theta}_{n, a, b} = a\hat{\theta}_{n, 1} + b\hat{\theta}_{n, 2}
+$$
+
+  + Compute:
+  
+$$
+M_{ab} := MQE(\hat{\theta}_{n, a, b})  
+$$
+
+  + Minimize $M_{ab}$ in $(a, b)$.
+  
+If $\hat{\theta}_{n, 1}$ and $\hat{\theta}_{n, 2}$ are **unbiased** estimators and you want to keep $\hat{\theta}_{n, a, b}$ unbiased, take $b = 1-a$.
+
+
+#### Exercise
+
+Let $X_1, ..., X_n$ **i.i.d** $\mathcal{P}(\lambda)$.
+
+Compute an estimator for $\lambda$ by:
+
+1. Method of moments.
+2. Maximum likelihood.
+
+**Solution**
+
+1. Since $X \sim \mathcal{P}(\lambda) \Rightarrow \begin{cases} \mathbb{E}[X] = \lambda \\ V[X] = \lambda\end{cases}$
+
+One estimator is:
+
+$$
+\hat{\lambda}_{n, 1} = \mathbb{E}[X] = \dfrac{1}{n}\sum_{i=1}^n X_i 
+$$
+
+another estimator for $\lambda$ is given by:
+
+$$
+\hat{\lambda}_{n, 2} = \mathbb{E}[X] = \dfrac{1}{n}\sum_{i=1}^n (X_i - \hat{X}_n)^2 
+$$
+
+2. Let $x_1, ..., x_n$ positive integers.
+
+
+\begin{align*}
+\mathcal{L}(x_1, ..., x_n; \lambda) &= \prod_{i=1}^n P(X_1 =x_i) \quad (\text{identically distributed}) \\
+&=    \prod_{i=1}^n \bigg( \dfrac{\lambda^{x_i}e^{-\lambda}}{x_i!}\bigg) \\
+&=   \lambda^{\sum x_i}e^{-n\lambda} \underbrace{\dfrac{1}{\prod_{i=1}^nx_i!}}_{\text{Not depends on }\lambda} \\
+\end{align*}
+
+since we need to minimize over $\lambda$ and $\log$ is an increasing function, we consider:
+
+$$
+g(\lambda) = \sum{x_i}\cdot\log(\lambda) - n\lambda
+$$
+
+now, find the critical to find the critical points, we solve
+
+$$
+g'(\lambda) = 0 \iff \lambda = \dfrac{1}{n}\sum x_i
+$$
+
+by analysing the sign of $g'$ we can conclude that this point is a maximum and therefore:
+
+$$
+\hat{\lambda}_{n, 3} = \dfrac{1}{n}\sum_{i=1}^n X_i 
+$$
+
+is an estimator for $lambda$ (the same obtained by the Methods of Moments).
+
+
+
+#### Practical Work
 
 1. Load the data in R software.
 2. Propose a model for the variables associated to this file.
 + Make a visualization of this.
 
 
-```{r read_data}
+##### Data 1
 
-data <- as.matrix(read.table("data/data1.txt"))
+Load the data.
+
+```{r load_data1}
+
+data1 <- as.matrix(read.table("data/data1.txt"))
 
 ## Some comments about the data and data types.
 
 ```
 
-```{r graphic_data}
 
-hist(data, freq = FALSE)
+In this two graph we see that we can't determine just by looking at the graph a precise value for the parameters.
 
+```{r graphic_data1}
 
-## Be careful about getting conclusions
+## Set freq = FALSE in order to obtain a correct graph.
 
-data1_min = min(data)
-data1_max = max(data)
+## Be careful about getting conclusions, since the function make the
+## bins automatically.
 
-hist(data, freq = FALSE, breaks = seq(data1_min, data1_max, length = 10))
+hist(data1, freq = FALSE)
 
+## Create a personalize breaks
+
+data1_min = min(data1)
+data1_max = max(data1)
+l = seq(data1_min, data1_max, length = 10)
+
+hist(data1, freq = FALSE, breaks = l)
 ```
 
 We guess a Gaussian distribution.
@@ -892,34 +1013,40 @@ How to estimate the parameters of the distribution?
 
 Compute the empirical mean and statistical variance.
 
-```{r compute_parameters}
+```{r compute_parameters_data1}
 
-mhu <- mean(data)
+mhu <- mean(data1)
 
 # When you compute the variance be careful and read the documentation
 # in this case we have:
 # "The denominator n - 1 is used which gives an unbiased estimator of the (co)variance 
 # for i.i.d. observations"
 
-sigma2 <- var(data)
+sigma2 <- var(data1)
 
 ## You also can do it manually:
 
-sigma2 <- 1/(nrow(data)-1)*sum((data - mean(data))^2)
+sigma2 <- 1/(nrow(data1)-1)*sum((data1 - mean(data1))^2)
 
 ```
 
 Plot the theoretical density that we guess.
 
-```{r get_hit_info}
+
+To this graph we use the information of the histogram associated to the data.
+
+```{r get_hit_info, warning=FALSE}
 
 ## This generates a list, with all the hist information.
 
-H <- hist(data, freq = FALSE, plot = FALSE) ## ignore warning message
+H <- hist(data1, freq = FALSE, plot = FALSE) ## ignore warning message
 H
 
 ```
-```{r make_comparison}
+
+Comparison graph
+
+```{r make_comparison_data1}
 
 ## Histogram info to use.
 limits <- H$breaks
@@ -928,15 +1055,19 @@ lmax <- limits[length(limits)]
 
 ## Create our plot
 
+## Create a vector that represents the [lmin, lmax] interval.
 x <- seq(lmin, lmax, by = 0.01)
+
+## Compute the density of the vector x associated to the parameters mhu y sigma2.
 y <- dnorm(x, mhu, sqrt(sigma2))
 
-
+## Set the y_max as the max in the empirical density and the 'artificial' density.
 y_max = max(y, H$density)
 
-## Make the comparison 
 
-hist(data, freq = FALSE, xlim = c(lmin, lmax), ylim = c(0, y_max*1.01))
+## Make a plot for the comparison 
+
+hist(data1, freq = FALSE, xlim = c(lmin, lmax), ylim = c(0, y_max*1.01))
 par(new = TRUE)
 plot(x, y, type = 'l', col = 'red'
      , xlim = c(lmin, lmax)
@@ -947,102 +1078,163 @@ plot(x, y, type = 'l', col = 'red'
 
 Test the goodness of fitness.
 
-```{r test_results}
+```{r test_results_data1}
 
 ks.test(x, 'pnorm', mhu, sqrt(sigma2))
 
+## Outputs:
+
+## The D: notion of distance between the data and the guess distribution. 
+## The p-value: Used to reject or accept the propose model. 
+
 ```
 
-### Data set 2
+Model values vs Real values
 
-```{r}
+```{r model_values_vs_real_values_data1}
+## Model values
+#mhu
+#sigma2
 
+## Real values
+real_mhu = 2.0
+real_sigma = 0.1
+
+cat('model_mhu:', mhu, 'vs', 'real_mhu:', real_mhu, '\n')
+cat('model_sigma:', sqrt(sigma2), 'vs', 'real_sigma:', real_sigma)
+
+```
+
+##### Data 2
+
+
+Load the data.
+
+```{r load_data2}
 ## Loading the data
 A <- as.matrix(read.table("data/data2.txt"))
 
+A_max = max(A)
+```
 
+In this graph we can observe that there is potentially less observation in the last class, but if we look at the maximum of our dataset (`r A_max`), this last class exist because the maximum is slighter bigger than 7, so R automatically creates a new class just for this element. 
+
+```{r graphic_data2}
 ## Make visualizations
-
 hist(A, freq = FALSE)
-## The right box exist because r creates one class with just one element.
+```
 
-## There is a formula that generates the right amount of classes, given by:
+To avoid this, we can use a strategy to creates better classes.
 
-## K aproxx 1 + 3.22*log(n, 10) ## (in practice take the floor)
+##### Create classes
 
+If we have a dataset with $n$ observations.
 
+The number classes classes is given by:
 
-## Use right parameters:
+$$
+K \approx 1 +3.22\times \log_{10}(n) \quad (\text{take the floor to get an integer value.})
+$$
+The limits of the classes are given by:
 
+$$
+a_0 = \min(x_i) - \varepsilon \\
+a_K = \max(x_i) + \varepsilon
+$$
+
+the $\varepsilon$ correction is to ensure that all the observations are contained in our partition.
+
+Also the $\varepsilon$ value depends on the order of magnitude of the data (numerator of the equation) and the precision of the software that we are using (denominator of the equation). 
+
+$$
+\varepsilon = \dfrac{\max(x_i) - \min(x_i)}{10^9}
+$$
+the other break points can be constructed as follow:
+
+$$
+a_i = a_0 + i\times amp \quad \text{for} \quad i\in \{1, ..., K \}
+$$
+
+where 
+
+$$
+amp = \dfrac{a_K -a_0}{K} \quad (\text{length of the classes})
+$$
+Lets use this in our dataset.
+
+```{r graph_correct_classes}
+
+## Compute correct classes parameters:
 n = length(A)
 K = floor(1 + 3.22*log(n, 10))
 A_min = min(A)
 A_max = max(A)
 
-A_mp = (A_max - A_min)/K
+amp = (A_max - A_min)/K
 
 epsilon = (A_max - A_min)/10^9
 
-limits = seq(A_min, A_max, by = A_mp)
+limits = seq(A_min, A_max, by = amp)
 
 
 hist(A, freq = FALSE, breaks = limits)
+```
 
-## We guess is an uniform distribution
+We guess is an uniform distribution $\mathcal{U}[a, b]$.
 
-## Make start in 0
+In this cases we have two estimate 2 parameters, previously we had been working with the uniform distribution $\mathcal{U}[0, \theta]$ and prove that $2\overline{X}_n$ and $\dfrac{n+1}{n}\max(X_i)$ are unbiased and $\max(X_i)$ is a biased estimator for $\theta$.
 
-A_zero = A - min(A)
+In order to find unbiased estimators for the parameters $a, b$ of our distribution$\mathcal{U}[a, b]$ we should make all the computations again.
 
-A_min = min(A_zero)
-A_max = max(A_zero)
-hist(A_zero, freq = FALSE, breaks = seq(A_min, A_max, length = 10))
+In practice we can consider the *naive* estimators:
 
-## Estimate the parameter
+$$
+a = \min(X_i) \\
+b = \max(X_i)
+$$
 
-n <- length(A_zero)
+or we can try to find unbiased estimators usign the Method of Moments:
 
-theta <- ((n+1)/n)*max(A_zero)
+Let $X \sim \mathcal{U}[a, b]$, so:
 
-## Create our theoretical density plot
+$$\mathbb{E}[X] = \dfrac{a+b}{2}  \quad \text{and} \quad V[X] = \dfrac{(b-a)^2}{12}$$
+By applying the method of moments  we get:
 
+$$\dfrac{\hat{a}_n + \hat{b}_n}{2}= \overline{X}_n  \quad \text{and} \quad  \dfrac{(\hat{b}_n - \hat{a}_n)^2}{12} = \hat{\sigma}_n^2$$
+solving this system for $\hat{a}_n$ and $\hat{b}_n$ we obtain:
 
-H <- hist(A_min, freq = FALSE, plot = FALSE) ## ignore warning message
-## Histogram info to use.
-limits <- H$breaks
-lmin <- limits[1]
-lmax <- limits[length(limits)]
+$$
+\hat{a}_n = \dfrac{1}{2}\bigg(2\overline{X}_n - \sqrt{12\hat{\sigma}_n^2}\bigg) \\
+\hat{b}_n = \dfrac{1}{2}\bigg(2\overline{X}_n + \sqrt{12\hat{\sigma}_n^2}\bigg)
+$$
 
-## Create our plot
+For this case we are going to use the Naive estimators, and compare again the 
+Model values vs Real values.
 
-x <- seq(lmin, lmax, by = 0.01)
-y <- dunif(x, min = lmin, max = theta )
+```{r model_values_vs_real_values_data2}
 
-y_max = max(y, H$density)
+## Model values
+a = min(A)
+b = max(A)
 
-## Make the comparison 
+## Real values
+real_a = 2.5
+real_b = 7.1
 
-hist(A_min, freq = FALSE, xlim = c(lmin, lmax), ylim = c(0, y_max*1.01))
-par(new = TRUE)
-plot(x, y, type = 'l', col = 'red'
-     , xlim = c(lmin, lmax)
-     , ylim = c(0, y_max*1.01)
-     , xlab = ""
-     , ylab = "")
-
-
+cat('model_a:', a, 'vs', 'real_a:', real_a, '\n')
+cat('model_b:', b, 'vs', 'real_b:', real_b)
 ```
 
 
-### Discrete case
+##### Data 3
 
+In progress
 
-data4.txt
+##### Data 4 
+
+In progress
 
 ```{r}
-
-
-
 ## Loading the data
 A <- as.matrix(read.table("data/data4.txt"))
 
@@ -1073,11 +1265,11 @@ ph
 
 ```
 
-data5.txt
+##### Data 5
+
+In progress
 
 ```{r}
-
-
 ## Loading the data
 A <- as.matrix(read.table("data/data5.txt"))
 
@@ -1284,4 +1476,10 @@ par(new = TRUE)
 plot(x, yt, type = 'l', xlim = c(0, max_Mo), ylim = c(0,1), col = 'red')
 
 ```
+
+
+
+## Appendix 
+
+### Types of convergence
 
