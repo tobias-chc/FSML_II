@@ -1298,15 +1298,29 @@ ph
 
 ## When p is small is very hard to get correct estimations of n when you 
 ## don't have enough number of observations
+
+
+## end day 2
 ```
 
-
-## Day 3 (In progress)
 
 
 ### Confidence interval
 
-```{r}
+#### Confidence interval
+
+**Definition**: Lets $\theta$ an unknown parameter and $\alpha \in [0, 1]$ *fixed*.
+
+A confidence interval (there is no uniqueness) for $\theta$, with confidence level $100\times(1-\alpha) \%$, in a random interval $[A_n, B_n]$ such that:
+
+- $A_n$ and $B_n$ are functions of $(X_1, ..., X_n)$ *i.i.d* r.v whose distribution depends on $\theta$.
+
+- $P(\theta \in [A_n, B_n]) =  1- \alpha$
+
+
+**Interpretation**: It means that in $100\times(1-\alpha) \%$ of the cases the true value of $\theta$ will be into $[A_n, B_n]$.
+
+```{r confidence_int_1}
 m1 = c()
 
 for (i in 1:50) {
@@ -1349,16 +1363,109 @@ r = rep(c("A", "B", "C"), each = 50)
 
 S = data.frame(x = a, l = r)
 ```
-In this plot we can see that the approximation depends on the number of observations and the variance of the sample.
 
-```{r}
+In the following plot we can see that the approximation depends on the number of observations and the variance of the sample.
+
+```{r confidence_int_2}
 boxplot(S$x ~ S$l)
 ```
 
+#### How to construct $A_n$ and $B_n$?
+
+- Methodology for all the cases
+- We learn this one on classical examples
+
+**Framework**:
+
+1. Case 1: $X_1, ..., X_n$ *i.i.d* with distribution $\mathcal{N}(\mu, \sigma^2)$.
+
+Construct a confidence interval for $\mu$ (two sub cases):
+
+  + Assume $\sigma^2$ known
+  + Assume $\sigma^2$ unknown
+  
+2. Case 2:  $X_1, ..., X_n$ *i.i.d* with expectation $\mu$ and a variance  $\sigma^2$.
+
+We want to construct a confidence interval for $\mu$ (two sub cases):
+
+  + Assume $\sigma^2$ known
+  + Assume $\sigma^2$ unknown
+  
+3. Case 3:  $X_1, ..., X_n$ *i.i.d* with distribution $\mathcal{N}(\mu, \sigma^2)$ $\sigma^2$.
+
+Construct a confidence interval for $\sigma^2$.
+
+
+Each time we want to construct a confidence interval, we need at first a point estimator.
+But, we need some information on this point estimator. 
+The main one it's distribution or an approximated distribution of it.
+
+#### Case 1:
+
+We want to estimate the expectation $\mu$: a classical point estimator $\hat{\mu}_n$ is:
+
+$$
+\hat{\mu}_n = \overline{X_n}
+$$
+
+Since the $X_i$ are ***independent*** (this is needed) Gaussian r.v:
+
+$$
+\overline{X_n} \sim \mathcal{N}(\mu, \sigma^2/n)
+$$
+
+we make standardization:
+
+$$
+\sqrt{n}\cdot\dfrac{(\overline{X_n} -\mu)}{\sigma} \sim \mathcal{N}(0, 1)
+$$
+
+**Idea:** We want to find $A_n, B_n$, functions of $X_1, ..., X_n$, such that:
+
+$$P(\mu \in [A_n, B_n]) = 1 - \alpha$$
+
+$\overline{X}_n$ is an estimator for $\mu$ (an unbiased and convergent one)
+a possible choice is:
+
+$$
+\begin{cases}
+A_n = \overline{X}_n - S_n \\
+B_n = \overline{X}_n + T_n
+\end{cases}
+$$
+
+So, we want to determine $S_n$ and $T_n$ such that:
+
+
+\begin{align*}
+P(\mu \in [\overline{X}_n - s_n, \overline{X}_n+ T_n]) &= 1- \alpha\\
+\iff  \\
+P(\overline{X}_n - S_ n \leq \mu \leq \overline{X}_n+ T_n) &= 1-\alpha \\
+\iff  \\
+P(- T_ n \leq \overline{X}_n  - \mu \leq S_n) &= 1-\alpha \\
+\iff  \\
+P\bigg(\frac{\sqrt{n}}{\sigma} \cdot (-T_ n) \leq \sqrt{n}\cdot\dfrac{(\overline{X_n} -\mu)}{\sigma} \leq \frac{\sqrt{n}}{\sigma} \cdot S_n\bigg) &= 1-\alpha
+\end{align*}
+
+since $\sigma$ it's known we can take
+
+$$
+\begin{cases}
+\frac{\sqrt{n}}{\sigma} \cdot (-T_ n)\\
+\frac{\sqrt{n}}{\sigma} \cdot (S_ n)
+\end{cases}
+$$
+
+as being constants.
+
+So we have to find two constants with just one equation, this means infinite number of solutions.
 
 
 
-### Chi squared distribution
+
+
+
+#### Chi squared distribution
 
 ```{r}
 x = seq(0.1, 10, by =0.01)
@@ -1387,7 +1494,7 @@ plot(x, y9, type = 'l', col = 'red', xlim = c(0, 10), ylim = c(0, 0.5))
 
 
 
-### t-student distribution
+#### t-student distribution
 
 ```{r}
 x = seq(-10, 10, by =0.01)
